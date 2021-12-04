@@ -30,7 +30,7 @@ Fonctionnalités supplémentaires :
 ### Détails d'un produit : 
 ![](https://cdn.discordapp.com/attachments/888148589434531900/916788798665420831/Screenshot_2021-12-04-21-27-19-33_63fa91ab4e1531a02ca4b6363e92a453.jpg)  
 ### Panier : 
-![](https://cdn.discordapp.com/attachments/888148589434531900/916788785495289916/Screenshot_2021-12-04-21-27-15-50_63fa91ab4e1531a02ca4b6363e92a453.jpg)  
+![](https://cdn.discordapp.com/attachments/888148589434531900/916800744370364456/Screenshot_2021-12-04-22-18-44-56_63fa91ab4e1531a02ca4b6363e92a453.jpg)  
 ### Profil : 
 ![](https://cdn.discordapp.com/attachments/888148589434531900/916788798900305920/Screenshot_2021-12-04-21-27-22-22_63fa91ab4e1531a02ca4b6363e92a453.jpg)  
     
