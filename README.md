@@ -4,13 +4,25 @@ Projet réalisé par Sabrina Mercuri
 
 ## MVP
 
-Toutes les US ont été réalisées et elles fonctionnent.  
-
 Compte existant :    
 login: sabrina@gmail.com  
-password: sabrina  
+password: sabrina
+
+Toutes les US ont été réalisées et elles fonctionnent : 
+- connexion, 
+- liste produits, 
+- détails produit, 
+- panier,
+- profil.  
+ 
+Fonctionnalités supplémentaires : 
+- TabBar pour filtrer les produits, 
+- inscription d'un nouvel utilisateur, 
+- mettre un article en favoris, 
+- affichage d'une alerte quand on veut ajouter le produit au panier alors qu'il y est déjà. 
   
-Voici quelques images pour illustrer le rendu :  
+## Illustration des pages : 
+
 ### Connexion : 
 ![](https://cdn.discordapp.com/attachments/888148589434531900/916788736778440714/Screenshot_2021-12-04-21-26-44-25_63fa91ab4e1531a02ca4b6363e92a453.jpg)  
 ### Liste des produits : 
