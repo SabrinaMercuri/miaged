@@ -124,10 +124,10 @@ class _ItemTileState extends State<ItemTile> {
                     subtitle: Text(item.taille+" - "+item.prix.toString()+"€"),
                     trailing: TextButton.icon(
                       onPressed: () async {
-                        setState(() async {
+                        setState(() {
                           item.favoris = !item.favoris;
-                          await DatabaseService(uid: uid, uidItem: item.uid).favoriteItem(item);
                         });
+                        await DatabaseService(uid: uid, uidItem: item.uid).favoriteItem(item);
                       },
                       label: const Text(""),
                       icon : item.favoris ? const Icon(Icons.favorite, color: Colors.pink) : const Icon(Icons.favorite, color: Colors.blueGrey),
