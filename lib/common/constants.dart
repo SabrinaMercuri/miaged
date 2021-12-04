@@ -17,3 +17,4 @@ const textInputDecoration = InputDecoration(
     borderSide: BorderSide(color:Colors.blue, width:1.0),
   ),
 );
+const kDefaultPadding = 50.0;

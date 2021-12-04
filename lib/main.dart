@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamProvider<AppUser?>.value(
-      value: AuthenticationService().user,
+      value: AuthenticationService().user, ///vérifie l'user courant
       initialData: null,
       child : MaterialApp (
         home: AuthHomeWrapper(),

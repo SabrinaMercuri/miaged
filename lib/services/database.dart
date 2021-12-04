@@ -30,7 +30,7 @@ class DatabaseService {
   }
 
   Future<void> changeBasket(Basket basket) async {   //ajouter un item au panier
-      return await basketCollection.doc(uidItem).set({
+      return await basketCollection.doc(uid).collection('basket de :' +uid).doc(uidItem).set({
         'titre': basket.titre,
         'image': basket.image,
         'taille':basket.taille,
@@ -39,7 +39,7 @@ class DatabaseService {
   }
 
   Future<void> removeItem() async {   //ajouter un item au panier
-    basketCollection.doc(uidItem).delete();
+    basketCollection.doc(uid).collection('basket de :' +uid).doc(uidItem).delete();
   }
 
   AppUserData _userFromSnapshot(DocumentSnapshot snapshot) {
@@ -98,11 +98,11 @@ class DatabaseService {
   }
 
   Stream<Basket> get basketItem{ //ajouter un item au panier
-    return basketCollection.doc(uidItem).snapshots().map(_basketFromSnapshot);
+    return basketCollection.doc(uid).collection('basket de :' +uid).doc(uidItem).snapshots().map(_basketFromSnapshot);
   }
 
   Stream<Iterable<Basket>> get basket { //récupérer tous les items du panier
-    return basketCollection.snapshots().map(_basketListFromSnapshot);
+    return basketCollection.doc(uid).collection('basket de :' +uid).snapshots().map(_basketListFromSnapshot);
   }
 
 }

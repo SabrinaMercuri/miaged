@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:miaged/models/user.dart';
 import 'package:miaged/services/database.dart';
 
+
 class AuthenticationService {
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,6 +29,24 @@ class AuthenticationService {
       }
 
       return _userFirebase(user);
+    } catch (exception) {
+      print(exception.toString());
+      return null;
+    }
+  }
+
+  Future registerWithLoginAndPassword(String login, String password) async {
+    try {
+      UserCredential result =
+      await _auth.createUserWithEmailAndPassword(email: login, password: password);
+      User? user = result.user;
+      if (user == null) {
+        throw Exception("No user found");
+        } else {
+        await DatabaseService(uid : user.uid, uidItem: '').saveUser(login, password, new DateTime.now(), '', '', '');
+
+        return _userFirebase(user);
+      }
     } catch (exception) {
       print(exception.toString());
       return null;

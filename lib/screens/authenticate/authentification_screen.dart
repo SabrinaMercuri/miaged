@@ -4,6 +4,7 @@ import 'package:miaged/common/loading.dart';
 import 'package:miaged/services/authentication.dart';
 
 class AuthentificationScreen extends StatefulWidget {
+  const AuthentificationScreen({Key? key}) : super(key: key);
   @override
   _AuthentificationScreenState createState() => _AuthentificationScreenState();
 }
@@ -24,24 +25,47 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
     super.dispose(); //
   }
 
+  void toggleView() {
+    setState(() {
+      _formKey.currentState?.reset();
+      error = '';
+      login.text = '';
+      password.text = '';
+      showSignIn = !showSignIn;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return loading
-        ? Loading()
+        ? const Loading()
         : //pour le chargement pour afficher un loader en attedant la requete à firebase sinon scaffold
         Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
               backgroundColor: Colors.blueGrey,
               elevation: 0.0,
-              title: Text('Connexion'),
+              title: Text(showSignIn ? 'Connexion' : 'Créer un compte'),
+              actions: <Widget>[
+                TextButton.icon(
+                  icon: const Icon(
+                    Icons.person,
+                    color: Colors.white,
+                  ),
+                  label: Text(showSignIn ? "Créer un compte" : 'Connexion',
+                      style: const TextStyle(color: Colors.white)),
+                  onPressed: () => toggleView(),
+                ),
+              ],
             ),
-            body: Container(
-              padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+            body: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
               child: Form(
                 key: _formKey,
                 child: Column(
                   children: [
+                    Image.asset('assets/images/logo.png'),
+                    const SizedBox(height: 10.0),
                     TextFormField(
                       controller: login,
                       decoration:
@@ -50,7 +74,7 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
                           ? "Veuillez entrer un login valide"
                           : null,
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     TextFormField(
                       controller: password,
                       decoration:
@@ -60,19 +84,21 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
                           ? "Veuillez entrer un password valide"
                           : null,
                     ),
-                    SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     ElevatedButton(
                       child: Text(
-                        "Se connecter",
-                        style: TextStyle(color: Colors.white),
+                        showSignIn ? "Connexion" : "Créer un compte",
+                        style: const TextStyle(color: Colors.white),
                       ),
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState!.validate() == true) {
                           setState(() => loading = true);
                           var mdp = password.value.text;
                           var nom = login.value.text;
 
-                          dynamic result = await _auth.signInWithLoginAndPassword(nom, mdp);  //authentification firebase
+                          dynamic result = showSignIn
+                              ? await _auth.signInWithLoginAndPassword(nom, mdp)
+                              : await _auth.registerWithLoginAndPassword(nom, mdp);  //authentification firebase
                           if (result == null) {
                             setState(() {
                               loading = false;
@@ -83,11 +109,11 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
                         }
                       },
                     ),
-                    /*SizedBox(height: 10.0),
+                    const SizedBox(height: 10.0),
                     Text(
                       error,
-                      style: TextStyle(color: Colors.red, fontSize: 15.0),
-                    ),*/
+                      style: const TextStyle(color: Colors.red, fontSize: 15.0),
+                    ),
                   ],
                 ),
               ),

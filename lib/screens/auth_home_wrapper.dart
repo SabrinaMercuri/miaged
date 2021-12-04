@@ -5,13 +5,15 @@ import 'package:provider/provider.dart';
 import 'home/home_screen.dart';
 
 class AuthHomeWrapper extends StatelessWidget {
+  const AuthHomeWrapper({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AppUser?>(context);
     if (user == null) {
-      return AuthentificationScreen();
+      return const AuthentificationScreen();
     } else {
-      return HomeScreen();
+      return const HomeScreen();
     }
   }
 }

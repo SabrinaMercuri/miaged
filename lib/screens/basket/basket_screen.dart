@@ -1,27 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:miaged/common/constants.dart';
 import 'package:miaged/models/basket.dart';
-import 'package:miaged/screens/home/home_screen.dart';
-import 'package:miaged/screens/items/item_screen.dart';
-import 'package:miaged/screens/profile/profile_infos.dart';
-import 'package:miaged/screens/profile/profile_screen.dart';
 import 'package:miaged/services/authentication.dart';
 import 'package:miaged/services/database.dart';
 import 'package:provider/provider.dart';
 
 class BasketScreen extends StatefulWidget {
+  final String uid;
+  const BasketScreen({Key? key, required this.uid}) : super(key: key);
+
   @override
   _BasketScreenState createState() {
-    return _BasketScreenState();
+    return _BasketScreenState(uid);
   }
 }
 
 class _BasketScreenState extends State {
   //
-  final AuthenticationService _auth = AuthenticationService();
+  final String uid;
+
+  _BasketScreenState(this.uid);
 
   @override
   Widget build(BuildContext context) {
-    final basket = Provider.of<Iterable<Basket>>(context) ?? [];
+    final basket = Provider.of<Iterable<Basket>>(context);
     return SingleChildScrollView(
         child: Column(
       children: [
@@ -29,12 +31,16 @@ class _BasketScreenState extends State {
             itemCount: basket.length,
             itemBuilder: (context, index) {
               return BasketTile(
-                  basket.elementAt(index)); //tous les items (appelés en bas)
+                  basket: basket.elementAt(index),
+                  uid: uid); //tous les items (appelés en bas)
             },
             shrinkWrap: true,
-            physics: ScrollPhysics()
-            ),
-        Text('Total:' + prixTotal(basket)),
+            physics: const ScrollPhysics()),
+        Padding(
+            //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Text('Total : ' + prixTotal(basket),
+                style: const TextStyle(fontSize: 20))),
       ],
     ));
   }
@@ -42,46 +48,48 @@ class _BasketScreenState extends State {
   String prixTotal(Iterable<Basket> basket) {
     //string car affiché dans un text
     double total = 0.0;
-    basket.forEach((item) {
-      total += item.prix * item.quantity;
-    });
+    for (var item in basket) {
+      total += item.prix;
+    }
     return double.parse(total.toStringAsFixed(2)).toString();
   }
 }
 
 class BasketTile extends StatelessWidget {
+  const BasketTile({Key? key, required this.basket, required this.uid})
+      : super(key: key);
   //chaque items du panier
   final Basket basket;
-
-  BasketTile(this.basket);
+  final String uid;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 0.5),
       child: Card(
-        margin:
-            EdgeInsets.only(top: 12.0, bottom: 6.0, left: 20.0, right: 20.0),
-        child: Column(children: [
-          Text('Vêtement : ${basket.titre}'),
-          Text('Quantité : ${basket.quantity}'),
-          Image(image: NetworkImage(basket.image, scale: 0.2)),
+        margin: const EdgeInsets.only(
+            top: 12.0, bottom: 0.5, left: 20.0, right: 20.0),
+        child: Row(children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Image.network(basket.image, width: 90,
+              height: 90),
+          ),
+          Expanded(
+              child: Column(
+            children: [
+              Text(basket.titre+" - "+basket.taille),
+              const SizedBox(height: 14.0),
+              Text("prix : "+ basket.prix.toString()+"€"),    /// +basket.taille),
+              const SizedBox(height: 4.0),
+            ],
+          )),
           TextButton.icon(
-            icon: Icon(Icons.delete),
-            label: Text(''),
+            icon: const Icon(Icons.delete),
+            label: const Text(''),
             onPressed: () async {
-              basket.quantity--;
-              if (basket.quantity == 0) {
-                await DatabaseService(
-                        uid: 'wYoxYBW3niU1XzEI0GxLVa4lIeb2',
-                        uidItem: basket.uid)
+              await DatabaseService(uid: uid, uidItem: basket.uid)
                     .removeItem();
-              } else {
-                await DatabaseService(
-                        uid: 'wYoxYBW3niU1XzEI0GxLVa4lIeb2',
-                        uidItem: basket.uid)
-                    .changeBasket(basket);
-              }
             },
           )
         ]),
