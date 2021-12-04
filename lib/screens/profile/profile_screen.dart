@@ -67,7 +67,7 @@ class _ProfileScreenState extends State {
               SizedBox(
                 child: Row (
                   children: [
-                    Text(" Anniversaire :   "),
+                    const Text(" Anniversaire :   "),
                     TextButton(
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.blueGrey[50],

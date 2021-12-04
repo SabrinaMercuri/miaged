@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:miaged/common/constants.dart';
 import 'package:miaged/models/basket.dart';
 import 'package:miaged/models/items.dart';
-import 'package:miaged/screens/basket/basket_screen.dart';
-import 'package:miaged/screens/home/home_screen.dart';
-import 'package:miaged/screens/profile/profile_screen.dart';
 import 'package:miaged/services/authentication.dart';
 import 'package:miaged/services/database.dart';
 
@@ -18,14 +14,14 @@ class ItemScreen extends StatefulWidget {
   @override
   _ItemScreenState createState() {
 
-    return _ItemScreenState(item: item, uid: uid);
+    return _ItemScreenState(item, uid);
 
   }
 }
 
 class _ItemScreenState extends State {
   final AuthenticationService _auth = AuthenticationService();
-  _ItemScreenState({Key? key, required this.item, required this.uid}) : super ();
+  _ItemScreenState(this.item, this.uid) : super ();
   final AppItemData item;
   final String uid;
 
@@ -39,8 +35,8 @@ class _ItemScreenState extends State {
           title: const Text("Détails vêtement"),
           actions: <Widget>[
             TextButton.icon(
-                icon: const Icon(Icons.person),
-                label: const Text('logout'),
+                icon: const Icon(Icons.person, color: Colors.white,),
+                label: const Text('logout', style: TextStyle(color: Colors.white)),
                 onPressed: () async {
                   await _auth.signOut();
                 }),
@@ -51,16 +47,20 @@ class _ItemScreenState extends State {
               children: [
                 const SizedBox(height: 10.0),
                 Padding(
-                  padding: EdgeInsets.only(top: 10),
+                  padding: const EdgeInsets.only(top: 10),
                   child:
                   Image.network(item.image, width: 350,
                       height: 350),
                 ),
-
-                Text(item.titre),
+                const SizedBox(height: 20.0),
+                Text(item.titre, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                const SizedBox(height: 15.0),
                 Text("taille : "+item.taille),
+                const SizedBox(height: 10.0),
                 Text("marque : "+item.marque),
+                const SizedBox(height: 10.0),
                 Text("prix : "+item.prix.toString()+"€"),
+                const SizedBox(height: 20.0),
                 StreamBuilder<Basket> (
                   stream: _database.basketItem,
                   builder: (context, snapshot) {
@@ -69,6 +69,13 @@ class _ItemScreenState extends State {
                       label: const Text('Ajouter au panier'),
                       onPressed: () async {
                         if(snapshot.hasData) {
+                          showDialog(context: context, builder: (context) {
+                            return const AlertDialog(
+                              title: Text('Attention !'),
+                              content: Text('Vous avez déjà ajouté cet article dans votre panier'),
+                            );
+                          }
+                          );
                           Basket? basket =snapshot.data;
                           basket!.quantity++;
                           await _database.changeBasket(basket);

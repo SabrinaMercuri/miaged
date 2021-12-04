@@ -1,16 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:miaged/models/items.dart';
 import 'package:miaged/models/user.dart';
-import 'package:miaged/screens/basket/basket_screen.dart';
-import 'package:miaged/screens/items/item_screen.dart';
-import 'package:miaged/screens/profile/profile_infos.dart';
-import 'package:miaged/screens/profile/profile_screen.dart';
 import 'package:miaged/services/authentication.dart';
-import 'package:miaged/services/database.dart';
 import 'package:provider/provider.dart';
-
 import '../body_wrapper.dart';
-import '../items/item_list.dart';
+
 
 
 class HomeScreen extends StatefulWidget {
@@ -36,8 +29,8 @@ class _HomeScreenState extends State {
           title: title,
           actions: <Widget>[
             TextButton.icon(
-                icon: const Icon(Icons.person),
-                label: const Text('logout'),
+                icon: const Icon(Icons.person, color: Colors.white),
+                label: const Text('logout', style: TextStyle(color: Colors.white)),
                 onPressed: () async {
                   await _auth.signOut();
                 }),

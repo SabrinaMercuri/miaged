@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:miaged/common/constants.dart';
 import 'package:miaged/common/loading.dart';
@@ -102,8 +104,8 @@ class _AuthentificationScreenState extends State<AuthentificationScreen> {
                           if (result == null) {
                             setState(() {
                               loading = false;
-                              error = "Veuillez entrer un login valide";
-                              print(error);
+                              error = "Veuillez entrer un login ou un password valide";
+                              log(error);
                             });
                           }
                         }

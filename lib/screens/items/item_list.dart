@@ -1,10 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:miaged/common/constants.dart';
 import 'package:miaged/models/items.dart';
 import 'package:miaged/screens/items/item_screen.dart';
-import 'package:miaged/services/authentication.dart';
+import 'package:miaged/services/database.dart';
 import 'package:provider/provider.dart';
 
 class ItemList extends StatefulWidget {
@@ -26,14 +24,15 @@ class _ItemListState extends State<ItemList> {
     final items = Provider.of<Iterable<AppItemData>>(context);
 
     return DefaultTabController(
-       length: 3,
+       length: 4,
        child : Scaffold(
-      appBar: new TabBar(
+      appBar: const TabBar(
         labelColor: Colors.blueGrey,
         tabs: [
           Tab(text: "Tous"),
           Tab(text: "Femme"),
           Tab(text: "Homme"),
+          Tab(text: "Favoris"),
         ],
       ),
       body:  TabBarView (
@@ -68,6 +67,16 @@ class _ItemListState extends State<ItemList> {
                 physics: const ScrollPhysics()
             ),
           ),
+          SingleChildScrollView (
+            child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return ItemTile(item: items.elementAt(index),filtre: "Favoris", uid: uid);
+                },
+                shrinkWrap: true,
+                physics: const ScrollPhysics()
+            ),
+          ),
         ],
 
        ),
@@ -78,31 +87,51 @@ class _ItemListState extends State<ItemList> {
 
 }
 
-
-class ItemTile extends StatelessWidget {
+class ItemTile extends StatefulWidget {
   final AppItemData item;
   final String filtre;
-
   final String uid;
   const ItemTile({Key? key, required this.item, required this.filtre, required this.uid}) : super (key: key);
+
+  @override
+  _ItemTileState createState() => _ItemTileState(item, filtre, uid);
+}
+
+
+
+class _ItemTileState extends State<ItemTile> {
+  final AppItemData item;
+  final String filtre;
+  final String uid;
+  _ItemTileState(this.item, this.filtre, this.uid);
 
 
   @override
   Widget build(BuildContext context) {
-    if(item.categorie==filtre || filtre=="Tous") {
+    if(item.categorie==filtre || filtre=="Tous" || (filtre=="Favoris" && item.favoris)) {
       return Padding(
         padding: const EdgeInsets.only(top: 1.0),
         child: Card(
           //margin: const EdgeInsets.only(top: 1.0, bottom: 1.0, left: 1.0, right: 1.0),
           child: Padding (
-            padding: EdgeInsets.only(top: 10),
+            padding: const EdgeInsets.only(top: 10, left: 10, bottom: 10),
             //padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
             child: Column (
               children: [
                 ListTile(
                     title: Text(item.titre),
-                    leading: Image.network(item.image),
+                    leading: Image.network(item.image, ),
                     subtitle: Text(item.taille+" - "+item.prix.toString()+"€"),
+                    trailing: TextButton.icon(
+                      onPressed: () async {
+                        setState(() async {
+                          item.favoris = !item.favoris;
+                          await DatabaseService(uid: uid, uidItem: item.uid).favoriteItem(item);
+                        });
+                      },
+                      label: const Text(""),
+                      icon : item.favoris ? const Icon(Icons.favorite, color: Colors.pink) : const Icon(Icons.favorite, color: Colors.blueGrey),
+                    ),
                     onTap: () {
                       //pas onPressed car pas bouton mais widget
                       //méthode navigator pour aller à la page détails
@@ -123,4 +152,6 @@ class ItemTile extends StatelessWidget {
       );
     }
   }
+
+
 }

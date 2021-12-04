@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:miaged/models/user.dart';
 import 'package:miaged/services/database.dart';
@@ -30,7 +30,7 @@ class AuthenticationService {
 
       return _userFirebase(user);
     } catch (exception) {
-      print(exception.toString());
+      log(exception.toString());
       return null;
     }
   }
@@ -43,12 +43,12 @@ class AuthenticationService {
       if (user == null) {
         throw Exception("No user found");
         } else {
-        await DatabaseService(uid : user.uid, uidItem: '').saveUser(login, password, new DateTime.now(), '', '', '');
+        await DatabaseService(uid : user.uid, uidItem: '').saveUser(login, password, DateTime.now(), '', '', '');
 
         return _userFirebase(user);
       }
     } catch (exception) {
-      print(exception.toString());
+      log(exception.toString());
       return null;
     }
   }
@@ -57,7 +57,7 @@ class AuthenticationService {
     try {
       return await _auth.signOut();
     } catch (exception) {
-      print(exception.toString());
+      log(exception.toString());
       return null;
     }
   }
@@ -69,12 +69,12 @@ class AuthenticationService {
 
     user.reauthenticateWithCredential(credential).then((value) {
       user.updatePassword(newP).then((value) {
-        print("succes");
+        log("succes");
       }).catchError((error) {
-        print("erreur");
+        log("erreur");
       });
     }).catchError((error) {
-      print("erreur");
+      log("erreur");
     });
   }
 }

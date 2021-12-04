@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:miaged/common/constants.dart';
 import 'package:miaged/models/basket.dart';
-import 'package:miaged/services/authentication.dart';
 import 'package:miaged/services/database.dart';
 import 'package:provider/provider.dart';
 

@@ -42,6 +42,18 @@ class DatabaseService {
     basketCollection.doc(uid).collection('basket de :' +uid).doc(uidItem).delete();
   }
 
+  Future<void> favoriteItem(AppItemData fav) async {
+    return await vetementsCollection.doc(uidItem).set({
+      'titre': fav.titre,
+      'image': fav.image,
+      'taille': fav.taille,
+      'prix': fav.prix,
+      'marque': fav.marque,
+      'categorie': fav.categorie,
+      'favoris': fav.favoris,
+    });
+  }
+
   AppUserData _userFromSnapshot(DocumentSnapshot snapshot) {
     DateTime anniversaire = snapshot.data()['anniversaire'].toDate();
     return AppUserData(
@@ -68,6 +80,7 @@ class DatabaseService {
       prix: snapshot.data()['prix'],
       marque: snapshot.data()['marque'],
       categorie: snapshot.data()['categorie'],
+      favoris: snapshot.data()['favoris'],
     );
   }
 

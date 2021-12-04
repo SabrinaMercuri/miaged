@@ -8,6 +8,7 @@ class AppItemData {
   final num prix;
   final String marque;
   final String categorie;
+  bool favoris;
 
   AppItemData({
     required this.uid,
@@ -17,6 +18,6 @@ class AppItemData {
     required this.prix,
     required this.marque,
     required this.categorie,
-
+    required this.favoris,
   });
 }
