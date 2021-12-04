@@ -83,7 +83,7 @@ class BasketTile extends StatelessWidget {
             ],
           )),
           TextButton.icon(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(Icons.close_rounded),
             label: const Text(''),
             onPressed: () async {
               await DatabaseService(uid: uid, uidItem: basket.uid)
